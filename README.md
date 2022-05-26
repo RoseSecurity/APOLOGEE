@@ -2,7 +2,9 @@
 
 APOLOGEE is a Python script and Metasploit module that enumerates a hidden directory on Siemens APOGEE PXC BACnet Automation Controllers (all versions prior to V3.5) and TALON TC BACnet Automation Controllers (all versions prior to V3.5). With a 7.5 CVSS, this exploit allows for an attacker to perform an authentication bypass using an alternate path or channel to access hidden directories in the web server.  This repository takes advantage of CVE-2017-9947.
 
-![PXCM](https://user-images.githubusercontent.com/72598486/170394871-939364f6-d942-4a51-b854-36c3b1410644.png)
+<p align="center">
+  <img width="600" alt="PXCM" src="https://user-images.githubusercontent.com/72598486/170399536-2ac18d9a-ba50-41a8-95ae-c17d42f59d63.png">
+</p>
 
 # CVE:
 
