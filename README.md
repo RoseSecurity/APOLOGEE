@@ -8,7 +8,7 @@ APOLOGEE is a Python script and Metasploit module that enumerates a hidden direc
 
 # What are Siemens Field Panels?
 
-Siemens Field Panels primarily provide process control for Building automation systems (BAS). A building automation system (BAS) is a network designed to connect and automate certain functions inside a building. All of the building control systems, from lighting and HVAC (Heating, Ventilation & Air Conditioning) to fire and security systems—all wired through one set of controls. So what does this mean? By using APOLOGEE, you can enumerate the devices controlling building automation processes for information on their locations, configurations, and much more!
+Siemens Field Panels primarily provide process controls for Building automation systems (BAS). A building automation system (BAS) is a network designed to connect and automate certain functions inside a building. All of the building control systems, from lighting and HVAC (Heating, Ventilation & Air Conditioning) to fire and security systems—all wired through one set of controls. So what does this mean? By using the APOLOGEE repository, you can enumerate the devices controlling building automation processes for information on their locations, configurations, and much more!
 
 # CVE:
 
@@ -20,10 +20,10 @@ A directory traversal vulnerability could allow a remote attacker with network a
 
 ## Details:
 
+- **Vulnerabilities:** Authentication Bypass Using an Alternate Path or Channel, Path Traversal
 - **CVSS v3:** 7.5
 - **Vendor:** Siemens
 - **Equipment:** BACnet Field Panels
-- **Vulnerabilities:** Authentication Bypass Using an Alternate Path or Channel, Path Traversal
 - **Products:** APOGEE PXC BACnet Automation Controllers: All versions prior to V3.5 and TALON TC BACnet Automation Controllers: All versions prior to V3.5
 
 ## Mitigation:
@@ -37,6 +37,14 @@ http://w3.usa.siemens.com/buildingtechnologies/us/en/contact-us/Pages/bt-contact
 Two Python scripts are available: siemens_field_panel_scanner.py and APOLOGEE.py. The siemens_field_panel_scanner.py script is a Metasploit module that can be loaded into the framework for simple auxiliary uses on internal Operational Technology and Industrial Control System (ICS) networks. The APOLOGEE.py script is a standalone program for enumerating field panels using standard command line arguments. 
 
 ## Install: 
+
+Download repository:
+
+```
+$ mkdir APOLOGEE
+$ cd APOLOGEE/
+$ sudo git clone https://github.com/RoseSecurity/APOLOGEE.git
+``
 
 ## Demo:
 
