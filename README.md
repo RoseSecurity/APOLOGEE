@@ -46,6 +46,42 @@ $ cd APOLOGEE/
 $ sudo git clone https://github.com/RoseSecurity/APOLOGEE.git
 ```
 
+Install dependencies:
+
+```
+$ pip3 install -r requirements.txt
+```
+
+APOLOGEE.py Usage:
+
+```
+# python3 APOLOGEE.py <Siemens Field Panel IP>
+
+$ python3 APOLOGEE.py 192.168.1.22
+```
+
+siemens_field_panel_scanner.py Usage:
+
+To load the script into Metasploit:
+
+```
+# Make the script executable
+$ chmod +x siemens_field_panel_scanner.py
+# Create directory for module
+$ mkdir -p ~/.msf4/modules/auxiliary/scanner/scada
+# Move script into folder
+$ mv siemens_field_panel_scanner.py ~/.msf4/modules/auxiliary/scanner/scada
+```
+
+Fire up Metasploit:
+
+```
+$ msfconsole -q
+# Reload modules
+msf> reload_all
+msf> use /modules/auxiliary/scanner/scada/siemens_field_panel_scanner.py
+```
+
 ## Demo:
 
 https://user-images.githubusercontent.com/72598486/170400132-732e5e86-bde1-4117-a0ff-aef043a3a2cd.mp4
