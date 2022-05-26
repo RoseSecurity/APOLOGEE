@@ -10,6 +10,11 @@ APOLOGEE is a Python script and Metasploit module that enumerates a hidden direc
 
 Siemens Field Panels primarily provide process controls for Building automation systems (BAS). A building automation system (BAS) is a network designed to connect and automate certain functions inside a building. All of the building control systems, from lighting and HVAC (Heating, Ventilation & Air Conditioning) to fire and security systems—all wired through one set of controls. So what does this mean? By using the APOLOGEE repository, you can enumerate the devices controlling building automation processes for information on their locations, configurations, and much more!
 
+
+## Demo:
+
+https://user-images.githubusercontent.com/72598486/170400132-732e5e86-bde1-4117-a0ff-aef043a3a2cd.mp4
+
 # CVE:
 
 An attacker with network access to the integrated web server (Ports 80/TCP and 443/TCP) could bypass the authentication and download sensitive information from the device.
@@ -85,10 +90,7 @@ msf> use /modules/auxiliary/scanner/scada/siemens_field_panel_scanner.py
 If you encounter any errors, check the following log:
 
 ```
-$ cat ~/.msf4/logs/framework.log
+$ tail ~/.msf4/logs/framework.log
 ```
 
-## Demo:
-
-https://user-images.githubusercontent.com/72598486/170400132-732e5e86-bde1-4117-a0ff-aef043a3a2cd.mp4
-
+If you are interested in writing your own Python modules for Metasploit, check out: https://docs.metasploit.com/docs/development/developing-modules/external-modules/writing-external-python-modules.html
