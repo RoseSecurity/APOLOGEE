@@ -34,3 +34,7 @@ Two Python scripts are available: siemens_field_panel_scanner.py and APOLOGEE.py
 
 ## Install: 
 
+## Demo:
+
+https://user-images.githubusercontent.com/72598486/170400132-732e5e86-bde1-4117-a0ff-aef043a3a2cd.mp4
+
