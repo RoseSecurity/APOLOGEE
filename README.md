@@ -6,6 +6,10 @@ APOLOGEE is a Python script and Metasploit module that enumerates a hidden direc
   <img width="600" alt="PXCM" src="https://user-images.githubusercontent.com/72598486/170399536-2ac18d9a-ba50-41a8-95ae-c17d42f59d63.png">
 </p>
 
+# What are Siemens Field Panels?
+
+Siemens Field Panels primarily provide process control for Building automation systems (BAS). A building automation system (BAS) is a network designed to connect and automate certain functions inside a building. All of the building control systems, from lighting and HVAC (Heating, Ventilation & Air Conditioning) to fire and security systems—all wired through one set of controls. So what does this mean? By using APOLOGEE, you can enumerate the devices controlling building automation processes for information on their locations, configurations, and much more!
+
 # CVE:
 
 An attacker with network access to the integrated web server (Ports 80/TCP and 443/TCP) could bypass the authentication and download sensitive information from the device.
