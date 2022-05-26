@@ -11,12 +11,10 @@ dependencies_missing = False
 try:
     import logging
     import requests
-    import requests
     import xmltodict
     import xml.etree.ElementTree as ET
     import socket
     import struct
-    import requests
 except ImportError:
     dependencies_missing = True
 
