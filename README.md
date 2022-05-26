@@ -82,6 +82,12 @@ msf> reload_all
 msf> use /modules/auxiliary/scanner/scada/siemens_field_panel_scanner.py
 ```
 
+If you encounter any errors, check the following log:
+
+```
+$ cat ~/.msf4/logs/framework.log
+```
+
 ## Demo:
 
 https://user-images.githubusercontent.com/72598486/170400132-732e5e86-bde1-4117-a0ff-aef043a3a2cd.mp4
