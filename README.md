@@ -51,12 +51,6 @@ $ cd APOLOGEE/
 $ sudo git clone https://github.com/RoseSecurity/APOLOGEE.git
 ```
 
-Install dependencies:
-
-```
-$ pip3 install -r requirements.txt
-```
-
 APOLOGEE.py Usage:
 
 ```
