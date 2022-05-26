@@ -37,6 +37,12 @@ Siemens has provided firmware Version V3.5 for BACnet Field Panels Advanced modu
 
 http://w3.usa.siemens.com/buildingtechnologies/us/en/contact-us/Pages/bt-contact-form.aspx
 
+Suricata rule for detection:
+
+```
+alert http any any -> any any (msg:"Siemens Field Panel Authentication Bypass Using an Alternate Path or Channel, Path Traversal"; http.method; content:"GET"; content:”FieldPanel.xml”; http_uri; reference: cve, CVE-2017-9947; priority:1; sid: 1000001; rev: 1;) 
+```
+
 # Scripts:
 
 Two Python scripts are available: siemens_field_panel_scanner.py and APOLOGEE.py. The siemens_field_panel_scanner.py script is a Metasploit module that can be loaded into the framework for simple auxiliary uses on internal Operational Technology and Industrial Control System (ICS) networks. The APOLOGEE.py script is a standalone program for enumerating field panels using standard command line arguments. 
